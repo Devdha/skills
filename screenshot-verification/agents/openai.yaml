@@ -1,0 +1,4 @@
+interface:
+  display_name: "Screenshot Verification"
+  short_description: "Capture browser screenshots as UI evidence"
+  default_prompt: "Use $screenshot-verification to verify this UI change in a real browser, capture the relevant screenshots, and report the evidence."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dead Code Detector"
+  short_description: "Find dead code and reduce bloated diffs"
+  default_prompt: "Review the current diff for confirmed dead code, orphaned code, unnecessary additions, and wet code. Produce a validated cleanup report before editing."
