@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Assistant"
+  short_description: "Review PRs by feature and verify findings"
+  default_prompt: "Use $review-assistant to review the current PR or diff. Decompose the changes by feature, validate candidate findings with code and runtime evidence where needed, and report only confirmed issues."

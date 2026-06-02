@@ -1,0 +1,4 @@
+interface:
+  display_name: "Worktree Manager"
+  short_description: "Use wm for git worktree workflows"
+  default_prompt: "Use $wm-git-worktree-manager to create, list, or remove git worktrees with explicit non-interactive wm commands."
