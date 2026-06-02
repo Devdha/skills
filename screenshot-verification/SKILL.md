@@ -51,7 +51,18 @@ Do not treat a screenshot of a different surface as proof. For example, an Expo 
    - Record the final URL, route, screen, or app surface.
    - If the work happens in a git worktree and environment files are required, copy them from the source project before running.
 
-3. Capture relevant states.
+3. Prepare and verify the state.
+
+   Creating or modifying local test data is encouraged when it is the clearest way to verify the rendered UI state end to end.
+
+   When using seeded, mocked, or manually adjusted data:
+
+   - Record the fixture setup at a high level: account, route, relevant state, and expected visible result.
+   - Verify the fixture before capture through the UI, API response, database read, or app state.
+   - If the fixture does not match the intended case, fix the fixture before taking final screenshots.
+   - If the screenshot contradicts the intended fixture, treat it as a failed verification and investigate before reporting it as evidence.
+
+4. Capture relevant states.
 
    Pick the smallest viewport and state set that can prove the claim.
 
@@ -64,7 +75,7 @@ Do not treat a screenshot of a different surface as proof. For example, an Expo 
 
    Capture before/after screenshots only when comparison is useful.
 
-4. Inspect runtime signals.
+5. Inspect runtime signals.
 
    Check for:
 
@@ -77,7 +88,26 @@ Do not treat a screenshot of a different surface as proof. For example, an Expo 
    - stuck loading, empty, or skeleton states
    - controls that shift layout on hover, focus, or content changes
 
-5. Save artifacts.
+   Classify runtime issues instead of merely listing them:
+
+   - target-related: likely caused by the feature or screen being verified
+   - ambient/pre-existing: unrelated app/dev-server issue observed while verifying
+   - inconclusive: needs follow-up before assigning cause
+
+   Mention all target-related and inconclusive issues in the final report. Ambient issues can be summarized briefly, but should not be silently ignored.
+
+6. Inspect captured screenshots.
+
+   After capture, inspect representative screenshots and confirm the expected visible text, state, rendered element, or visual condition is present.
+
+   Check that each screenshot is not:
+
+   - the wrong route, user, app, or device surface
+   - stale state from a previous case
+   - only a loading, skeleton, or error overlay state
+   - contradicted by the fixture setup
+
+7. Save artifacts.
 
    Save screenshots under the task's artifact or output area. Prefer, in order:
 
@@ -95,14 +125,17 @@ Do not treat a screenshot of a different surface as proof. For example, an Expo 
 
    Do not hardcode a user-specific absolute path inside this skill. Resolve artifact paths from the current workspace, project, or explicit user instructions.
 
-6. Report evidence.
+   Keep final artifacts separate from failed or intermediate screenshots. Preserve failing evidence when it helps explain a blocker, but label it clearly so it is not mistaken for a successful verification artifact.
+
+8. Report evidence.
 
    In the final response, include:
 
    - what was tested
+   - fixture or seeded state used, if any
    - which viewports, devices, or states were captured
    - screenshot artifact links or file paths
-   - notable runtime findings
+   - notable runtime findings, classified as target-related, ambient/pre-existing, or inconclusive
    - what was not verified, if anything
 
    When running in Codex desktop, prefer clickable artifact links for user-facing screenshots.
@@ -113,6 +146,8 @@ Screenshot verification is complete only when:
 
 - the target screen was opened in a real browser or real app surface
 - screenshots were captured for the relevant viewport, device, or state set
+- seeded or mocked state was verified when used
+- captured screenshots were inspected and the expected visible text, state, rendered element, or visual condition was confirmed
 - runtime errors and obvious rendering defects were checked
 - the final answer references the artifacts
 - any unverified scope is explicitly called out
