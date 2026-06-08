@@ -1,0 +1,4 @@
+interface:
+  display_name: "Naver Blog Writer"
+  short_description: "Draft Korean Naver Blog posts from notes and photos"
+  default_prompt: "Use $naver-blog-writer to draft or revise a Korean Naver Blog post with search-backed facts, natural mobile-readable tone, image slots, title candidates, tags, and publish settings."
