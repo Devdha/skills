@@ -86,6 +86,39 @@ If a self-edited or already-published user post is provided, extract its repeate
 
 Then write the new draft from that rhythm, not from a generic outline.
 
+## Aiity Micro-Diction Pass
+
+After the final body is structurally complete, run a separate micro-diction rewrite. This pass is about small wording, endings, particles, spacing tolerance, and sentence texture. Do not replace it with outline or flow advice.
+
+Use this pass especially when the user says the tone is not reflected, even if the post structure is already good.
+
+- Replace formal endings first:
+  - `방문했습니다` -> `다녀왔어요`, `먹고 왔어요`, `가봤어요`
+  - `좋았습니다` -> `좋았어요`, `괜찮았어요`, `맛있게 먹었어요`
+  - `추천드립니다` -> `추천이에요`, `가보셔도 좋을 듯해요`, `괜찮을 것 같아요`
+  - `느껴졌습니다` -> `느낌이었어요`, `느껴졌어요`, `그런 편이었어요`
+  - `확인할 수 있었습니다` -> `볼 수 있었어요`, `보이더라구요`, `보였어요`
+- Prefer the user's small everyday words over polished review nouns:
+  - use `여기`, `이 집`, `이날`, `쪽`, `같이`, `꽤`, `살짝`, `진짜`, `그래도`, `역시`
+  - avoid `전반적으로`, `인상적`, `만족도`, `구성`, `포인트`, `메리트`, `퀄리티`, `방문해보시길` unless the user supplies them
+- Keep small talky fragments when natural:
+  - `진짜 많을 때는 웨이팅도 있는 편!`
+  - `막국수 진짜 맛있게 먹었어요.`
+  - `정식엔 떡갈비도 같이 나와요!`
+  - `그래도 면만 먹고 끝나는 점심이 아니라`
+- Use the user's softeners as sentence texture, not just hedging:
+  - `~편이에요`, `~덜한 편이에요`, `~쪽`, `~듯해요`, `~괜찮을 것 같아요`, `~장점인 것 같아요`
+  - keep some `~인데요`, `~있어요`, `~나와요`, `~좋아요`, `~많죠?`
+- Keep punctuation close to the user's style when the post is casual:
+  - `~!`, `~!!`, `~~!`, `ㅋㅋㅋ`, `ㅎㅎ`, and light emoji can stay if they match the user's supplied draft
+  - do not flatten all punctuation into neat periods
+- Do not over-normalize every colloquial imperfection. If the user's draft has a casual spacing or rhythm like `갈 듯 해요~`, preserve that feel unless it creates an obvious typo.
+- If a sentence sounds like a brand review, make it sound like a personal note:
+  - Brand-review: `다양한 메뉴 구성이 장점으로 느껴졌습니다.`
+  - Aiity-like: `메뉴가 꽤 많아서 같이 간 사람끼리 취향 갈려도 주문하기 괜찮을 것 같아요!`
+
+Fail the micro-diction pass if the final body still sounds like a polite generated review after replacing only a few endings. The output should contain the user's small speaking habits, not just a casual version of an AI paragraph.
+
 ## Keyword Style Sampling
 
 Before drafting for a specific keyword or place, run a style sampling pass:
