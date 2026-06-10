@@ -119,6 +119,33 @@ Use this pass especially when the user says the tone is not reflected, even if t
 
 Fail the micro-diction pass if the final body still sounds like a polite generated review after replacing only a few endings. The output should contain the user's small speaking habits, not just a casual version of an AI paragraph.
 
+## Aiity Emphasis and Punctuation Pass
+
+Run this after the micro-diction pass. This is not about structure, SEO, or word replacement. It is specifically about the user's visible excitement marks and casual emphasis.
+
+The user's edited posts are not uniformly calm. They use little bursts of emphasis to make the post feel personally written.
+
+- Add emphasis where the user would naturally react, especially after a taste, satisfaction, surprise, or recommendation line.
+- Use `!`, `!!`, and occasionally `!!!` when the sentence has real enthusiasm:
+  - `쉽게 찾아볼 수 있어요~!`
+  - `점심 피크에는 사람 많은 편이에요!`
+  - `기름기가 살짝 도는 맛이! 느낌있게 맛있어요!! 😎`
+  - `만족스러운 점심을 먹을 수 있어요!!`
+  - `숯칼 추천이에요~!!`
+- Use `ㅋㅋㅋ`, `ㅎㅎ`, `~`, and one fitting emoji when they make the line sound like the user's casual blog voice:
+  - `계속 손 가는 맛이에요 ㅋㅋㅋ`
+  - `내일 점심은 숯칼 어떠신가요 ㅎㅎ`
+  - `저는 ... 쪽으로 갈 듯 해요~`
+- Keep the emphasis uneven. Do not put `!` on every positive sentence. A few strong bursts are better than a perfectly distributed pattern.
+- Do not sanitize `!!!`, `!!`, `ㅋㅋㅋ`, `ㅎㅎ`, emoji, or `~` out of the final body just because they look less polished. In this user's blog voice, that polish removal is the point.
+- Avoid replacing the user's energetic lines with neat review phrasing:
+  - Too flat: `숯불 향이 느껴져 만족스러웠습니다.`
+  - Aiity-like: `윤기 있고, 불향 있고, 계속 손 가는 맛이에요 ㅋㅋㅋ`
+  - Too flat: `든든한 식사를 원하는 분들께 추천합니다.`
+  - Aiity-like: `점심에 고기도 조금 먹고 싶고 막국수도 같이 먹고 싶을 때, 숯칼 추천이에요~!!`
+
+Fail this pass if the final body is grammatically casual but emotionally flat. If the post has no `!!`, `ㅋㅋㅋ`, `ㅎㅎ`, `~`, emoji, or similar visible emphasis in a casual food/place review, check whether the user's supplied reference style would have used one and add it where natural.
+
 ## Keyword Style Sampling
 
 Before drafting for a specific keyword or place, run a style sampling pass:
