@@ -48,6 +48,44 @@ Use these signals to make the public body feel like a real Korean Naver Blog pos
 
 Do not flood the post with exclamation marks, slang, or forced cuteness. Add enough human rhythm to break the AI-review pattern.
 
+## Aiity Personal Voice Calibration
+
+When writing for the user's `아잇티` blog, prioritize this personal voice profile over generic Naver Blog style sampling unless the user explicitly asks for a different tone.
+
+The user's style is casual, practical, and lightly personal. It should sound like a real person leaving a useful visit note, not like a review platform summary.
+
+- Start from a small real situation, not a broad introduction: `선릉역 근처에서 점심 먹을 때`, `오늘은 ... 먹고 왔어요`, `여긴 제가 ... 자주 가는 편인데`.
+- Use very short mobile lines. Split context, observation, and judgment into separate lines even when they could be one sentence.
+- Let the post scroll like a photo-backed diary. Avoid visible section headings inside the public body unless the user asks for them.
+- Use soft judgment markers that match the user's rhythm: `편이에요`, `덜한 편이에요`, `좋을 듯해요`, `갈 듯해요`, `쪽`, `제 기준`, `생각보다`, `꽤`, `살짝`.
+- Do not overuse those markers. A full restaurant/place review can use several of them, but repeated `~편이에요` or `~듯해요` in adjacent lines starts to sound patterned.
+- Talk around photos in a practical way: `사진은 ... 때 찍어서`, `메뉴 보시면`, `이쪽`, `안쪽도 생각보다`, `가게 앞에`.
+- Add real-world caveats when useful: peak-time crowding, solo dining difficulty, waiting, seating, ordering choice, or when a photo may mislead because of timing.
+- Describe taste with everyday physical phrasing, not gourmet-review vocabulary: `후루룩 먹기 좋고`, `입맛 당기는 맛`, `번갈아 먹으면`, `계속 손 가는 맛`, `덜 심심해요`.
+- Use contrastive phrasing for nuance: `막 엄청 ... 라기보다는`, `그냥 ... 보다`, `그래도 ... 아니라`, `다만`.
+- When recommending, make it situational instead of universal: `점심에 고기도 조금 먹고 싶고 ... 같이 먹고 싶을 때`, `더운 날엔 이쪽`, `국물 생각나는 날엔 이쪽`.
+- A gentle reader-facing close can work: `내일 점심은 ... 어떠신가요 ㅎㅎ`, but only when the topic naturally supports it.
+- Punctuation can be warmer than a formal draft: `~!`, occasional `~!!`, `ㅋㅋㅋ`, `ㅎㅎ`, and one fitting emoji are acceptable when the user's supplied text already has that energy.
+- Avoid making every post equally cheerful. Keep one or two honest cautions or limits so the post keeps the user's grounded feel.
+
+Useful transformation pattern:
+
+- Too formal: `매장은 넓고 다양한 메뉴가 준비되어 있어 여러 명이 방문하기 좋습니다.`
+- More like the user: `안쪽도 생각보다 넓어요. 테이블도 많고, 여러 명 점심으로 와도 크게 답답한 느낌은 덜한 편이에요!`
+
+- Too generic: `전체적으로 만족스러웠고 재방문 의사가 있습니다.`
+- More like the user: `저는 더운 날엔 막국수 쪽, 국물 생각나는 날엔 칼국수 쪽으로 갈 듯해요~`
+
+If a self-edited or already-published user post is provided, extract its repeated rhythm before drafting:
+
+- how the opening moves from situation to place/topic
+- where line breaks happen around photos
+- which softeners and reactions repeat
+- how practical caveats are inserted
+- how the closing recommendation is framed
+
+Then write the new draft from that rhythm, not from a generic outline.
+
 ## Keyword Style Sampling
 
 Before drafting for a specific keyword or place, run a style sampling pass:
@@ -121,6 +159,9 @@ After final synthesis, isolate only `## 최종 본문 초안` and run this check
    - every paragraph has the same length and rhythm
    - ordinary paragraphs over 160 characters remain unsplit
    - stiff endings or repeated `~같아요` in place of actual judgment
+   - visible public-body headings make the post read like an article rather than a personal Naver post
+   - practical caveats are missing from a place review where timing, crowding, seating, or ordering choice matters
+   - recommendations are universal instead of situational
 4. On failure, do not line-edit. Rewrite from the first scene again and re-run the gate.
 
 If the user asks for the review result, include a brief `AI 냄새 검수` note outside the public blog body. Otherwise keep this check internal.
