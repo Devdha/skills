@@ -146,6 +146,10 @@ The user's edited posts are not uniformly calm. They use little bursts of emphas
 
 Fail this pass if the final body is grammatically casual but emotionally flat. If the post has no `!!`, `ㅋㅋㅋ`, `ㅎㅎ`, `~`, emoji, or similar visible emphasis in a casual food/place review, check whether the user's supplied reference style would have used one and add it where natural.
 
+## Aiity-Safe AI-Tell Filter
+
+When the final body still smells like generated Korean, load `references/aiity-safe-ai-tell-filter.md` and apply only span-grounded fixes before the Aiity micro-diction and emphasis passes. Do not auto-call a generic external humanizer after the Aiity passes.
+
 ## Keyword Style Sampling
 
 Before drafting for a specific keyword or place, run a style sampling pass:
