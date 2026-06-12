@@ -146,10 +146,6 @@ The user's edited posts are not uniformly calm. They use little bursts of emphas
 
 Fail this pass if the final body is grammatically casual but emotionally flat. If the post has no `!!`, `ㅋㅋㅋ`, `ㅎㅎ`, `~`, emoji, or similar visible emphasis in a casual food/place review, check whether the user's supplied reference style would have used one and add it where natural.
 
-## Aiity-Safe AI-Tell Filter
-
-When the final body still smells like generated Korean, load `references/aiity-safe-ai-tell-filter.md` and apply only span-grounded fixes before the Aiity micro-diction and emphasis passes. Do not auto-call a generic external humanizer after the Aiity passes.
-
 ## Keyword Style Sampling
 
 Before drafting for a specific keyword or place, run a style sampling pass:
@@ -199,9 +195,12 @@ The review lenses should be treated as parallel checks, not as a single linear p
 - **Reader usefulness lens**: check whether the post helps a search visitor decide, not just whether it describes the visit.
 - **Image/story lens**: ensure every image slot proves something or moves the story. Remove redundant image slots when they only pad the post.
 - **Search/spam lens**: keep the main keyword clear while avoiding keyword stuffing, unnatural tags, or mechanical repetition.
+- **Aiity-safe AI-tell lens**: when the body still smells generated, load `references/aiity-safe-ai-tell-filter.md` and fix only clear AI/review-site spans.
 - **Independent AI-smell lens**: read only the final public body, ignoring all notes and sources, and judge whether a reader would suspect AI writing.
 
 Only after those checks, rewrite the final body as if a real person is publishing it on Naver Blog. The final version should not expose the review process unless the user asks for it.
+
+Final public-body order must be: AI-tell span fixes first, then `Aiity Micro-Diction Pass`, then `Aiity Emphasis and Punctuation Pass`, then the Independent AI-Smell Gate. Never run a generic humanizer after the Aiity passes.
 
 ## Independent AI-Smell Gate
 
@@ -373,6 +372,8 @@ Rewrite the final post from the reviewed draft:
 
 - preserve verified facts and the user's real impressions
 - apply the tone and length decisions from review
+- apply Aiity-safe AI-tell span fixes before any personal-voice polish
+- run Aiity micro-diction and emphasis passes last so `!!`, `ㅋㅋㅋ`, `ㅎㅎ`, `~`, and fitting emoji survive
 - keep useful details, but remove repetitive explanation
 - make the final body sound human, specific, and mobile-readable
 
