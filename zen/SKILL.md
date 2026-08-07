@@ -7,7 +7,7 @@ description: Use when 태스크를 설계부터 구현, PR 생성, 리뷰 하네
 
 ## 개요
 
-설계(인터랙티브, Notion 기획 적립) → 구현 → PR + 리뷰 하네스 → 재리뷰 수렴 → 최종 검증(화면·로직 실환경), 5단계 파이프라인.
+설계(인터랙티브, 기획 적립: Moonlight는 Notion, 그 외 `docs/plans/`) → 구현 → PR + 리뷰 하네스 → 재리뷰 수렴 → 최종 검증(화면·로직 실환경), 5단계 파이프라인.
 
 **핵심 원칙: 설계 문서가 자율성의 계약서다.** Phase 1의 산출물(design.md)에 의사결정 근거 + 구현 스펙 + 검증 시나리오 + finding 판단 기준이 모두 담기고, Phase 2~5의 모든 자율 판단은 이 문서를 근거로 한다. 사용자 게이트는 설계 승인 단 한 번. 동료 리뷰어 지정(6단계)은 파이프라인 범위 밖 — 사용자가 직접 한다.
 
@@ -44,14 +44,14 @@ Claude Code에서는 Skill 도구로, Codex/Grok에서는 위 경로의 파일�
   - 카운터는 전부 "완료 후 +1": `verify_attempts`는 검증 실행이 끝나 results.json 저장 직후, `review_round`는 그 라운드의 findings 처리(decisions.json 기록)까지 마친 직후. 따라서 "최대 3회" = 완료된 실행 3회.
   - `pr_number`는 PR 생성 **직후 즉시** 기록한다 (Phase 전환을 기다리지 않는다).
   - `held_findings`는 각 라운드 decisions.json에서 `held`/`rejected` 항목을 누적한 요약이다 (원본은 항상 decisions.json).
-  - `planning_page_url` = Phase 1에서 생성한 Notion 기획 페이지 URL. `post_verify_review_done` = Phase 5 구조적 수정에 대한 추가 하네스 라운드 사용 여부 (파이프라인당 1회 한).
+  - `planning_page_url` = Phase 1에서 생성한 기획 산출물 위치 — Notion 페이지 URL(Moonlight) 또는 `docs/plans/` 파일 경로(그 외). `post_verify_review_done` = Phase 5 구조적 수정에 대한 추가 하네스 라운드 사용 여부 (파이프라인당 1회 한).
 
 ## Phase 0 — preflight
 
 1. **재개 감지**: 현재 브랜치의 slug로 state.json이 존재하고 완료 전이면 재개 모드 — state·산출물(design.md, results.json, reviews/)을 읽고, git/gh 실제 상태(브랜치, head, PR)와 대조한다. `pr_number`가 비어 있으면 `gh pr list --head {branch}`로 복구. **마지막 갱신이 24시간 이상 지났거나 실제 상태와 불일치하면 요약을 보고하고 사용자 확인 후 재개한다.** design.md가 있고 phase ≥ 2면 Phase 1 게이트는 다시 밟지 않는다. 완료된 run_dir에 새 태스크로 시작하는 경우엔 `{branch-slug}.{완료시각}`으로 아카이브하고 새로 만든다.
 2. git repo, 기본 브랜치, **PR base 브랜치**(프로젝트 컨벤션 문서·기존 PR 관찰로 판단) 확인 — base는 state에 기록. `gh auth status` 미인증이면 여기서 중단하고 안내 (aws와 동일 규칙).
 3. `~/.zen/config.json` 없으면 세팅 마법사: S3 버킷/리전/public URL prefix 질문 → `aws sts get-caller-identity` 자격 확인 → **테스트 객체를 업로드하고 비인증 `curl -sI`로 200 확인** → **ListBucket 차단 확인** (무자격 목록 조회가 거부되는지) — 리스팅이 열려 있으면 중단하고 버킷 정책 수정 안내. lifecycle 정책을 쓰면 만료 시 PR 이미지가 깨진다는 트레이드오프를 고지한다. **`notion_planning_db`(태스크 기획 DB URL)도 여기서 질문해 저장한다.**
-4. **Notion 기획 DB 확인 (모든 태스크 공통)**: `config.notion_planning_db`가 있고 Notion 연동(MCP 등)으로 해당 DB에 접근 가능한지 확인한다. config에 없거나 접근 실패면 **게이트 전이므로 지금 사용자에게 확인받는다** — Phase 1 승인 직후 기획 페이지 생성이 게이트라서(예외 5), 여기서 채우지 않으면 승인 직후 중단된다.
+4. **기획 적립 위치 확인**: **Moonlight면** `config.notion_planning_db`가 있고 Notion 연동(MCP 등)으로 해당 DB에 접근 가능한지 확인한다 — config에 없거나 접근 실패면 **게이트 전이므로 지금 사용자에게 확인받는다** (Phase 1 승인 직후 기획 페이지 생성이 게이트라서(예외 5), 여기서 채우지 않으면 승인 직후 중단된다). **그 외 프로젝트는 확인 불필요** — 기획은 레포 `docs/plans/` 파일로 적립된다.
 5. 프로젝트 규칙 파악: CLAUDE.md/AGENTS.md, 브랜치·PR·**커밋 메시지** 컨벤션, 프로젝트 테스트 작성 스킬.
 6. **리뷰 하네스 선택·고정** (프로젝트 전용 하네스 우선 — 임의 폴백 금지):
 
@@ -79,13 +79,13 @@ zen-brainstorm 실행 → `{run_dir}/design.md` 산출. **게이트 질문과 �
 
 **승인 직후 순서 (모두 Phase 1 완료 조건):**
 
-1. **Notion 기획 페이지 생성 (게이트)**: zen-brainstorm 종료 게이트가 `config.notion_planning_db`에 태스크당 1페이지를 생성한다 (속성·본문 구성은 zen-brainstorm 본문). **생성 실패(MCP 부재·권한)면 Phase 2로 진입하지 않고 예외 5로 중단·보고한다.** 성공 시 URL을 `state.planning_page_url`과 design.md §0에 기록.
+1. **기획 적립 (게이트)**: zen-brainstorm 종료 게이트가 수행한다 — **Moonlight는** `config.notion_planning_db`에 태스크당 1페이지, **그 외 프로젝트는** 레포 `docs/plans/{YYYY-MM-DD}-{branch-slug}.md` 파일 (속성·내용 구성은 zen-brainstorm 본문). **적립 실패면 Phase 2로 진입하지 않고 예외 5로 중단·보고한다.** 성공 시 URL/경로를 `state.planning_page_url`과 design.md §0에 기록.
 2. design.md의 해시를 `state.design_hash`에 기록한다. **이후 design.md는 수정하지 않는다 (read-only 계약).** 판단 근거가 부족해지면 design.md를 고치는 대신 decisions.json에 자체 판단으로 기록하거나 예외 4로 중단한다.
 3. design.md §0의 브랜치명으로 run_dir을 확정한다.
 
 ## Phase 2 — 구현
 
-1. design.md §0의 브랜치명으로 브랜치 생성 (base = `state.base_branch`). 커밋 메시지도 프로젝트 컨벤션을 따른다.
+1. design.md §0의 브랜치명으로 브랜치 생성 (base = `state.base_branch`). 커밋 메시지도 프로젝트 컨벤션을 따른다. **비 Moonlight 프로젝트면 Phase 1의 `docs/plans/` 기획 파일을 브랜치 첫 커밋에 포함한다** (PR로 팀 공유되는 경로다).
 2. 구현 + 테스트 동반 작성 (프로젝트 테스트 스킬이 있으면 사용).
 3. lint / typecheck / test / build 통과할 때까지 수정. **상한: 동일 실패(같은 테스트/에러 시그니처)가 수정 시도 3회 연속 재현되거나 수정 시도 총 10회 초과 시, 환경/스코프 문제로 간주하고 중단·보고** (`fix_attempts`로 추적. 환경 기인 실패 의심 — 런타임 버전, 외부 서비스 — 이면 즉시 보고).
 4. **push 가드**: 모든 push 직전 `git branch --show-current`가 `state.branch`와 일치하는지 확인한다. 기본/base 브랜치이거나 불일치면 push하지 않고 중단·보고. force push 금지.
@@ -102,7 +102,7 @@ zen-brainstorm 실행 → `{run_dir}/design.md` 산출. **게이트 질문과 �
      ```
 
    - §0 검증 유형이 **N/A**(화면 표면 없는 태스크)면 placeholder 대신 design.md §5의 대체 증거(테스트/CLI 출력/로그)를 지금 첨부한다.
-   - PR 생성 직후 `state.pr_number` 기록 + **Notion 기획 페이지의 `PR` 열과 `상태`(진행 중)를 갱신**한다 (best-effort — 실패해도 중단하지 않고 report에 명시).
+   - PR 생성 직후 `state.pr_number` 기록. **Moonlight면** Notion 기획 페이지의 `PR` 열과 `상태`(진행 중)를 갱신한다 (best-effort — 실패해도 중단하지 않고 report에 명시). docs 파일 모드는 갱신 단계가 없다 (기획 파일이 PR에 포함돼 있다).
 
 2. 하네스 실행 (`state.harness` 고정값, 라운드 1). **`state.harness` 스킬을 호스트 규칙대로 실행한다 — 오케스트레이터의 자체 코드 리뷰 메모는 하네스 실행이 아니다.**
 
@@ -168,8 +168,8 @@ zen-brainstorm 실행 → `{run_dir}/design.md` 산출. **게이트 질문과 �
 
 **종료 절차 (검증 통과 또는 N/A):**
 
-1. **Notion 기획 페이지 갱신**: `상태` → `완료` (중단·인계로 끝나면 `중단`). best-effort — 실패 시 report에 명시.
-2. `{run_dir}/report.md` 작성 후 최종 보고: PR 링크, **기획 페이지 URL**, **Notion 리뷰 URL**, 반영/보류/기각 내역(근거 포함), 수렴 추이(로컬 라운드 기준 — 하네스 자체 지표와 산식이 다르면 병기), 검증 표(+커밋 SHA)와 검증 단계 수정 내역, 사용한 하네스·어댑터·harness_version. "남은 단계: 리뷰어 지정은 직접 진행하세요."
+1. **기획 산출물 갱신 (Moonlight만)**: Notion 기획 페이지 `상태` → `완료` (중단·인계로 끝나면 `중단`). best-effort — 실패 시 report에 명시. docs 파일 모드는 갱신하지 않는다 (PR 상태가 대변한다).
+2. `{run_dir}/report.md` 작성 후 최종 보고: PR 링크, **기획 산출물(Notion URL 또는 docs 경로)**, **Notion 리뷰 URL**, 반영/보류/기각 내역(근거 포함), 수렴 추이(로컬 라운드 기준 — 하네스 자체 지표와 산식이 다르면 병기), 검증 표(+커밋 SHA)와 검증 단계 수정 내역, 사용한 하네스·어댑터·harness_version. "남은 단계: 리뷰어 지정은 직접 진행하세요."
 
 ## 자율 실행 규칙
 
@@ -186,7 +186,8 @@ zen-brainstorm 실행 → `{run_dir}/design.md` 산출. **게이트 질문과 �
 ## 흔한 실수
 
 - design.md 없이 Phase 2 진행 → 금지. finding 처리 근거가 사라져 판단이 임의적이 된다.
-- **Notion 기획 페이지 생성 실패를 무시하고 Phase 2 진입** → 금지. Phase 1의 게이트다 — 예외 5로 중단·보고한다.
+- **기획 적립(Moonlight: Notion 페이지 / 그 외: docs/plans 파일) 실패를 무시하고 Phase 2 진입** → 금지. Phase 1의 게이트다 — 예외 5로 중단·보고한다.
+- **비 Moonlight 프로젝트에서 Notion에 기획을 적립하거나, docs 기획 파일을 브랜치 커밋에서 누락** → 금지. 적립 위치는 프로젝트로 결정되고, 파일 모드의 공유 경로는 PR이다.
 - 재리뷰 라운드에서 새 nit 발굴 → 수렴 위반. 하네스의 수렴 모드 지침을 따른다.
 - 서브 스킬 결과를 대화 기억에만 의존 → 금지. 모든 단계 산출물은 run 디렉토리 파일로 남기고 파일에서 다시 읽는다 (호스트 간 이동·재개 가능성).
 - **리뷰 루프 중에 최종 검증을 실행하거나, 리뷰 전에 확보한 증거를 최종 증거로 사용** → 금지. 검증 증거는 Phase 5에서 최종 head SHA로 확보한다. head와 불일치하는 증거는 위조와 같다.
