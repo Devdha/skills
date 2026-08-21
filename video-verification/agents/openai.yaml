@@ -1,0 +1,4 @@
+interface:
+  display_name: "Video Verification"
+  short_description: "Verify UI flows with video and screenshots"
+  default_prompt: "Use $video-verification to record and verify a UI flow from loading through completion."
